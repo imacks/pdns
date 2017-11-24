@@ -392,22 +392,9 @@ static void loadModules()
 }
 
 #ifdef __GLIBC__
-#include <execinfo.h>
 static void tbhandler(int num)
 {
-  L<<Logger::Critical<<"Got a signal "<<num<<", attempting to print trace: "<<endl;
-  void *array[20]; //only care about last 17 functions (3 taken with tracing support)
-  size_t size;
-  char **strings;
-  size_t i;
-  
-  size = backtrace (array, 20);
-  strings = backtrace_symbols (array, size); //Need -rdynamic gcc (linker) flag for this to work
-  
-  for (i = 0; i < size; i++) //skip useless functions
-    L<<Logger::Error<<strings[i]<<endl;
-  
-  
+  L<<Logger::Critical<<"Got a signal "<<num<<" (trace printing hard-disabled)"<<endl;  
   signal(SIGABRT, SIG_DFL);
   abort();//hopefully will give core
 
